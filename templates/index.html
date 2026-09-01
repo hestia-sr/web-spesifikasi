@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Spesifikasi & Jaringan Lengkap</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+    <style>
+        .row-spec { display: block; padding: 12px 16px; border-bottom: 1px solid #f3f4f6; }
+        .col-label { display: block; font-weight: 700; color: #4b5563; font-size: 0.75rem; letter-spacing: 0.05em; margin-bottom: 4px; text-transform: uppercase; }
+        .col-value { display: block; color: #1f2937; font-size: 0.95rem; word-break: break-word; }
+        .section-title { color: #2563eb; font-weight: bold; font-size: 0.95rem; margin-top: 24px; padding: 0 16px 8px 16px; border-bottom: 2px solid #e5e7eb; letter-spacing: 0.5px; }
+    </style>
+</head>
+<body class="bg-gray-200 py-6 px-2 md:px-4">
+
+    <div class="max-w-xl mx-auto bg-white shadow-xl overflow-hidden rounded-lg">
+        
+        <div class="bg-blue-100 text-blue-800 text-center font-bold py-4 text-lg tracking-wider border-b border-blue-200">
+            SPESIFIKASI & JARINGAN LENGKAP
+        </div>
+
+        <!-- UMUM -->
+        <div class="section-title">UMUM</div>
+        <div class="row-spec">
+            <span class="col-label">Brand / Model</span>
+            <span class="col-value font-bold text-purple-700" id="ui-model">Mendeteksi...</span>
+        </div>
+        <div class="row-spec">
+            <span class="col-label">Koneksi</span>
+            <span class="col-value" id="ui-koneksi">Mendeteksi...</span>
+        </div>
+        <div class="row-spec">
+            <span class="col-label">Waktu Lokal</span>
+            <span class="col-value text-green-600 font-medium" id="ui-waktu">Mendeteksi...</span>
+        </div>
+        <div class="row-spec">
+            <span class="col-label">Bahasa Sistem</span>
+            <span class="col-value" id="ui-bahasa">Mendeteksi...</span>
+        </div>
+
+        <!-- HARDWARE & MEMORI -->
+        <div class="section-title">HARDWARE & MEMORI</div>
+        <div class="row-spec">
+            <span class="col-label">Prosesor / Chipset</span>
+            <span class="col-value font-semibold text-blue-600">{{ cpu }}</span>
+        </div>
+        <div class="row-spec">
+            <span class="col-label">Penyimpanan Internal</span>
+            <span class="col-value font-semibold text-gray-800">{{ storage }}</span>
+        </div>
+        <div class="row-spec">
+            <span class="col-label">OS / Platform</span>
+            <span class="col-value" id="ui-os">Mendeteksi...</span>
+        </div>
+        <div class="row-spec">
+            <span class="col-label">CPU Cores</span>
+            <span class="col-value" id="ui-cpu">Mendeteksi...</span>
+        </div>
+        <div class="row-spec">
+            <span class="col-label">RAM (Estimasi)</span>
+            <span class="col-value" id="ui-ram">Mendeteksi...</span>
+        </div>
+
+        <!-- LAYAR & BATERAI -->
+        <div class="section-title">LAYAR & BATERAI</div>
+        <div class="row-spec">
+            <span class="col-label">Resolusi Layar</span>
+            <span class="col-value" id="ui-layar">Mendeteksi...</span>
+        </div>
+        <div class="row-spec">
+            <span class="col-label">Baterai</span>
+            <span class="col-value" id="ui-baterai">Mendeteksi...</span>
+        </div>
+
+        <!-- IP & PENYEDIA LAYANAN -->
+        <div class="section-title">IP & PENYEDIA LAYANAN</div>
+        <div class="row-spec">
+            <span class="col-label">Alamat IP</span>
+            <span class="col-value font-mono font-bold text-blue-600" id="ui-ip">Mendeteksi...</span>
+        </div>
+        <div class="row-spec">
+            <span class="col-label">ISP</span>
+            <span class="col-value" id="ui-isp">Mendeteksi...</span>
+        </div>
+        <div class="row-spec">
+            <span class="col-label">ASN / Host</span>
+            <span class="col-value" id="ui-asn">Mendeteksi...</span>
+        </div>
+
+        <!-- LOKASI -->
+        <div class="section-title">LOKASI SERVER (IP BASED)</div>
+        <div class="row-spec">
+            <span class="col-label">Negara</span>
+            <span class="col-value" id="ui-negara">Mendeteksi...</span>
+        </div>
+        <div class="row-spec">
+            <span class="col-label">Kota</span>
+            <span class="col-value" id="ui-kota">Mendeteksi...</span>
+        </div>
+        <div class="row-spec">
+            <span class="col-label">Kode Pos</span>
+            <span class="col-value" id="ui-kodepos">Mendeteksi...</span>
+        </div>
+        
+        <!-- PETA -->
+        <div class="px-4 py-4">
+            <span class="col-label mb-2">Peta Lokasi</span>
+            <div id="map" class="w-full h-56 rounded border bg-gray-200"></div>
+        </div>
+
+        <!-- HTTP HEADERS -->
+        <div class="section-title">HTTP HEADERS</div>
+        <div class="px-4 py-4">
+            <span class="col-label mb-2">Request Headers</span>
+            <pre id="ui-headers" class="bg-gray-900 text-green-400 p-4 rounded text-xs overflow-x-auto font-mono">Memuat headers...</pre>
+        </div>
+
+        <!-- FOOTER: HAK CIPTA & SOSIAL MEDIA -->
+        <div class="bg-gray-50 border-t px-6 py-6 text-center space-y-3">
+            <p class="text-xs font-semibold text-gray-600">
+                © 2026 <span class="font-extrabold text-gray-900">Hestia Sr.</span> All Rights Reserved.
+            </p>
+            <div>
+                <a href="https://www.facebook.com/Hestiaa.sr/" target="_blank" class="inline-flex items-center bg-blue-600 text-white text-xs px-5 py-2.5 rounded-full font-bold shadow hover:bg-blue-700 transition">
+                    <i class="fa-brands fa-facebook text-base mr-2"></i> Facebook Saya
+                </a>
+            </div>
+        </div>
+
+    </div>
+
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script>
+        setInterval(() => { document.getElementById('ui-waktu').innerText = new Date().toLocaleString('id-ID'); }, 1000);
+        document.getElementById('ui-bahasa').innerText = navigator.language || navigator.userLanguage;
+
+        document.getElementById('ui-layar').innerText = `${window.screen.width} x ${window.screen.height} piksel (${window.screen.colorDepth}-bit)`;
+        document.getElementById('ui-cpu').innerText = navigator.hardwareConcurrency ? `${navigator.hardwareConcurrency} Logical Cores` : 'Tidak terdeteksi';
+        document.getElementById('ui-ram').innerText = navigator.deviceMemory ? `~${navigator.deviceMemory} GB` : 'Tidak terdeteksi';
+
+        if (navigator.getBattery) {
+            navigator.getBattery().then(function(battery) {
+                let level = Math.round(battery.level * 100) + "%";
+                let status = battery.charging ? "🔌 Sedang Cas" : "🔋 Normal";
+                document.getElementById('ui-baterai').innerText = `${level} (${status})`;
+            });
+        } else {
+            document.getElementById('ui-baterai').innerText = "Tidak didukung";
+        }
+
+        async function setDeviceData() {
+            let modelName = "Tidak terdeteksi";
+            let osVersion = navigator.platform;
+
+            if (navigator.userAgentData) {
+                try {
+                    const data = await navigator.userAgentData.getHighEntropyValues(['model', 'platformVersion']);
+                    if (data.model) modelName = data.model;
+                    if (data.platform === 'Android' && data.platformVersion) {
+                        osVersion = `Android (Kernel: ${data.platformVersion})`;
+                    }
+                } catch (e) {}
+            }
+            if (modelName === "Tidak terdeteksi") {
+                const match = navigator.userAgent.match(/Android [0-9.]+;\s([^;)]+)/);
+                modelName = match && match[1] ? match[1].trim() : navigator.userAgent;
+            }
+            document.getElementById('ui-model').innerText = modelName;
+            document.getElementById('ui-os').innerText = osVersion;
+        }
+        setDeviceData();
+
+        const conn = navigator.connection;
+        if (conn) {
+            document.getElementById('ui-koneksi').innerText = `${conn.type ? conn.type.toUpperCase() : 'UNKNOWN'} | Kec: ${conn.downlink || 0} Mbps`;
+        }
+
+        fetch('https://ipapi.co/json/')
+            .then(res => res.json())
+            .then(data => {
+                document.getElementById('ui-negara').innerText = data.country_name || '-';
+                document.getElementById('ui-kota').innerText = data.city || '-';
+                document.getElementById('ui-kodepos').innerText = data.postal || '-';
+                document.getElementById('ui-ip').innerText = data.ip || '-';
+                document.getElementById('ui-isp').innerText = data.org || '-';
+                document.getElementById('ui-asn').innerText = data.asn || '-';
+                
+                if(data.latitude && data.longitude) {
+                    const map = L.map('map').setView([data.latitude, data.longitude], 13);
+                    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
+                    L.marker([data.latitude, data.longitude]).addTo(map).bindPopup(data.city).openPopup();
+                }
+            });
+
+        fetch('https://httpbin.org/headers')
+            .then(res => res.json())
+            .then(data => { document.getElementById('ui-headers').innerText = JSON.stringify(data.headers, null, 2); });
+    </script>
+</body>
+</html>
