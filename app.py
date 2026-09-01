@@ -8,7 +8,6 @@ app = Flask(__name__)
 
 def get_cpu_info():
   try:
-    # Mengambil data hardware langsung dari sistem properti Android
     board = (
         subprocess.check_output(['getprop', 'ro.product.board'])
         .decode('utf-8')
@@ -51,7 +50,7 @@ def get_storage_info():
           )
     except Exception:
       continue
-  return 'Izin penyimpanan belum aktif (ketik termux-setup-storage)'
+  return 'Cloud Server Storage (Render)'
 
 
 @app.route('/')
@@ -62,4 +61,5 @@ def index():
 
 
 if __name__ == '__main__':
-  app.run(host='0.0.0.0', port=5000)
+  port = int(os.environ.get('PORT', 5000))
+  app.run(host='0.0.0.0', port=port)
